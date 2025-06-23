@@ -1,2 +1,5 @@
 [phases.setup]
-aptPkgs= ["...", "libexpat1" , "gdal-bin", "gcc"]
+nixPkgs = ['expat']
+
+[phases.install]
+dependsOn = ['setup']
