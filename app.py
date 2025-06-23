@@ -140,80 +140,33 @@ def visualize_multiple_years(images_by_year):
     with col2:
         st.pyplot(fig)
 
-# def show_overlay_on_map(image_array, bbox):
-#     minx, miny, maxx, maxy = bbox
-#     height, width = image_array.shape
-#     transform = from_bounds(minx, miny, maxx, maxy, width, height)
-#     rgb = (ListedColormap(VIS_PALETTE)(image_array / 8.0)[:, :, :3] * 255).astype(np.uint8)
-#     rgb = np.transpose(rgb, (2, 0, 1))
-
-#     with tempfile.NamedTemporaryFile(delete=False, suffix=".tif") as temp_tif:
-#         with rasterio.open(temp_tif.name, "w", driver="GTiff", height=height, width=width, count=3, dtype=rgb.dtype, crs="EPSG:4326", transform=transform) as dst:
-#             for i in range(3): dst.write(rgb[i], i+1)
-
-#     m = leafmap.Map(center=[(miny+maxy)/2, (minx+maxx)/2], zoom=14)
-#     m.add_basemap("SATELLITE")
-#     m.add_raster(temp_tif.name, layer_name="Overlay", opacity=0.4)
-#     m.add_geojson(json.dumps({
-#         "type": "FeatureCollection",
-#         "features": [{
-#             "type": "Feature",
-#             "geometry": {
-#                 "type": "Polygon",
-#                 "coordinates": [[[minx, miny], [maxx, miny], [maxx, maxy], [minx, maxy], [minx, miny]]]
-#             },
-#             "properties": {"name": "AOI"}
-#         }]
-#     }), layer_name="AOI")
-#     m.add_legend(title="Land Cover Classes", legend_dict={DW_CLASSES[i]: VIS_PALETTE[i] for i in range(9)})
-#     m.to_streamlit(height=550)
-import base64
-from io import BytesIO
-import matplotlib.pyplot as plt
-
 def show_overlay_on_map(image_array, bbox):
     minx, miny, maxx, maxy = bbox
-    fig, ax = plt.subplots(figsize=(8, 8))
-    ax.imshow(image_array, cmap=ListedColormap(VIS_PALETTE), vmin=0, vmax=8)
-    ax.axis("off")
+    height, width = image_array.shape
+    transform = from_bounds(minx, miny, maxx, maxy, width, height)
+    rgb = (ListedColormap(VIS_PALETTE)(image_array / 8.0)[:, :, :3] * 255).astype(np.uint8)
+    rgb = np.transpose(rgb, (2, 0, 1))
 
-    buf = BytesIO()
-    plt.savefig(buf, format="png", bbox_inches="tight", pad_inches=0, transparent=True)
-    buf.seek(0)
-    encoded = base64.b64encode(buf.read()).decode("utf-8")
-    data_url = f"data:image/png;base64,{encoded}"
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".tif") as temp_tif:
+        with rasterio.open(temp_tif.name, "w", driver="GTiff", height=height, width=width, count=3, dtype=rgb.dtype, crs="EPSG:4326", transform=transform) as dst:
+            for i in range(3): dst.write(rgb[i], i+1)
 
-    # Leafmap
-    m = leafmap.Map(center=[(miny + maxy)/2, (minx + maxx)/2], zoom=14)
+    m = leafmap.Map(center=[(miny+maxy)/2, (minx+maxx)/2], zoom=14)
     m.add_basemap("SATELLITE")
-
-    # Add AOI rectangle
-    geojson = {
+    m.add_raster(temp_tif.name, layer_name="Overlay", opacity=0.4)
+    m.add_geojson(json.dumps({
         "type": "FeatureCollection",
         "features": [{
             "type": "Feature",
             "geometry": {
                 "type": "Polygon",
-                "coordinates": [[
-                    [minx, miny], [maxx, miny],
-                    [maxx, maxy], [minx, maxy],
-                    [minx, miny]
-                ]]
+                "coordinates": [[[minx, miny], [maxx, miny], [maxx, maxy], [minx, maxy], [minx, miny]]]
             },
-            "properties": {}
+            "properties": {"name": "AOI"}
         }]
-    }
-    m.add_geojson(geojson, layer_name="AOI")
-
-    # Add image overlay (raster) via base64
-    m.add_image_overlay(url=data_url, bounds=[[miny, minx], [maxy, maxx]], opacity=0.6, name="Overlay")
-
-    # Add legend
-    legend_dict = {DW_CLASSES[i]: VIS_PALETTE[i] for i in DW_CLASSES}
-    m.add_legend(title="Land Cover Classes", legend_dict=legend_dict)
-
+    }), layer_name="AOI")
+    m.add_legend(title="Land Cover Classes", legend_dict={DW_CLASSES[i]: VIS_PALETTE[i] for i in range(9)})
     m.to_streamlit(height=550)
-
 
 @st.cache_data
 def get_array(year, geojson_geom):
