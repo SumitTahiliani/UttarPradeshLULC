@@ -1,2 +1,2 @@
 [phases.setup]
-nixPkgs = ["...","libexpat", "gdal"]
+nixPkgs = ["...","expat", "gdal"]
