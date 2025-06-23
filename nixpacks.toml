@@ -1,5 +1,2 @@
 [phases.setup]
-nixPkgs = ["...", "expat" , "gdal", "gcc", "libspatialindex"]
-
-[phases.build]
-cmds = [ "...", "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/nix/var/nix/profiles/default/lib"]
+aptPkgs= ["...", "libexpat1" , "gdal-bin", "gcc", "libspatialindex"]
