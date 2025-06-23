@@ -12,6 +12,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+RUN echo '#!/bin/bash\necho "Running Streamlit app"\nstreamlit run app.py --server.port=$PORT --server.address=0.0.0.0' > entrypoint.sh
+RUN chmod +x entrypoint.sh
+
 EXPOSE 8501
 
-CMD sh -c "streamlit run app.py --server.port=${PORT:-8501} --server.address=0.0.0.0"
+ENTRYPOINT ["/bin/bash"]
+CMD ["entrypoint.sh"]
