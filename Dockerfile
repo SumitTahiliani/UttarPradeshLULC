@@ -17,6 +17,6 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8000
+EXPOSE 8501
 
-CMD ["./start.sh"]
+CMD ["streamlit", "run", "app.py", "--server.port=$PORT", "--server.enableCORS=false", "--server.enableXsrfProtection=false"]
