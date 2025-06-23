@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ['expat']
+nixPkgs = ["...", 'expat']
 
 [phases.install]
 dependsOn = ['setup']
