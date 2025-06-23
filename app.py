@@ -447,7 +447,7 @@ from utils import buffer_bbox
 import urllib.request
 
 RASTER_CACHE_DIR = "temp_rasters"
-RASTER_REMOTE_BASE = "https://huggingface.co/datasets/sumittahiliani/UttarPradeshYearlyDynamicWorld/tree/main"
+RASTER_REMOTE_BASE = "https://huggingface.co/datasets/sumittahiliani/UttarPradeshYearlyDynamicWorld/resolve/main"
 
 def get_raster_path(year):
     os.makedirs(RASTER_CACHE_DIR, exist_ok=True)
@@ -455,13 +455,17 @@ def get_raster_path(year):
 
     if not os.path.exists(local_path):
         remote_url = f"{RASTER_REMOTE_BASE}/dw_up_{year}.tif"
+        st.info(f"Downloading from: {remote_url}")
         try:
             with st.spinner(f"Downloading raster for {year}..."):
                 urllib.request.urlretrieve(remote_url, local_path)
+            st.success(f"Downloaded {year} successfully.")
         except Exception as e:
             st.warning(f"Failed to download {year}: {e}")
             return None
-    st.write(f"Path made successfully for {year}")
+    else:
+        st.info(f"Using cached file for {year}")
+    
     return local_path
 
 # === Constants ===
