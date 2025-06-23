@@ -19,6 +19,8 @@ WORKDIR /app
 
 COPY requirements.txt .
 
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir --no-binary rasterio,GDAL rasterio GDAL
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
