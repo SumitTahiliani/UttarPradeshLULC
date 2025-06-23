@@ -461,7 +461,7 @@ def get_raster_path(year):
         except Exception as e:
             st.warning(f"Failed to download {year}: {e}")
             return None
-
+    st.write(f"Path made successfully for {year}")
     return local_path
 
 # === Constants ===
@@ -501,7 +501,9 @@ def analyze_aoi(bbox):
     for year in range(2016, 2026):
         # path = os.path.join(RASTER_FOLDER, f"dw_up_{year}.tif")
         path = get_raster_path(year)
-        if not os.path.exists(path): continue
+        st.write(f"{path}")
+        if not os.path.exists(path):
+            return "Error in path formation"
 
         with rasterio.open(path) as src:
             out_image, _ = mask(src, geojson_geom, crop=True)
