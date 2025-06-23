@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 ENV GDAL_CONFIG=/usr/bin/gdal-config
+ENV LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+
+RUN ldconfig
 
 WORKDIR /app
 
