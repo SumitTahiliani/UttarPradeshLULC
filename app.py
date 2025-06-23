@@ -491,7 +491,6 @@ def analyze_aoi(bbox):
     for year in range(2016, 2026):
         # path = os.path.join(RASTER_FOLDER, f"dw_up_{year}.tif")
         path = get_raster_path(year)
-        st.write(f"{path}")
         if not os.path.exists(path):
             return "Error in path formation"
 
