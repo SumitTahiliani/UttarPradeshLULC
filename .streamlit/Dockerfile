@@ -20,6 +20,8 @@ WORKDIR /app
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade pip
+RUN ldconfig -p | grep expat
+RUN find /usr -name "*expat*" 2>/dev/null || true
 RUN pip install --no-cache-dir --no-binary rasterio,GDAL rasterio GDAL
 RUN pip install --no-cache-dir -r requirements.txt
 
