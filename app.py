@@ -248,7 +248,8 @@ if "selected_bbox" in st.session_state:
         df, images = analyze_aoi(buffered)
         if not df.empty:
             st.write("### Land Cover Class Trends Over Time")
-            st.dataframe(df, use_container_width=True, height=300)
+            # st.dataframe(df, use_container_width=True, height=300)
+            plot_land_cover_trends(df)
             if st.session_state["show_maps"]:
                 st.write("### Land Cover Maps Over 10 Years")
                 visualize_multiple_years(images)
