@@ -1,2 +1,11 @@
 [phases.setup]
-nixPkgs = ["...","expat", "gdal"]
+nixPkgs = ["expat" , "gdal", "gcc", "libspatialindex"]
+
+[phases.build]
+cmds = [
+  "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/nix/var/nix/profiles/default/lib",
+  "pip install -r requirements.txt"
+]
+
+[phases.start]
+cmd = "streamlit run app.py --server.port=$PORT --server.enableCORS=false --server.enableXsrfProtection=false"
