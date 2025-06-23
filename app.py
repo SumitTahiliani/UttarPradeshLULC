@@ -29,7 +29,13 @@ def get_raster_path(year):
     return local_path
 
 def downsample_and_mask(src, geojson_geom, scale_factor=0.2):
-    out_image, _ = mask(src, geojson_geom, crop=True)
+    try:
+        out_image, _ = mask(src, geojson_geom, crop=True)
+    except ValueError as e:
+        st.warning("⚠️ AOI does not overlap raster extent.")
+        st.write("Raster bounds:", src.bounds)
+        st.write("AOI bounds:", geojson_geom)
+        raise e
     data = out_image[0]
     if scale_factor != 1.0:
         data = resize(
@@ -40,6 +46,7 @@ def downsample_and_mask(src, geojson_geom, scale_factor=0.2):
             anti_aliasing=False
         ).astype(np.uint8)
     return data
+
 
 # === Constants ===
 DW_CLASSES = {
