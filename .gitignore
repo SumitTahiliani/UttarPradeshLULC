@@ -1,0 +1,7 @@
+*.tif
+*.zip
+temp_rasters/
+__pycache__/
+*.pyc
+.DS_Store
+.env
