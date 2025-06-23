@@ -19,4 +19,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8000
 
-ENTRYPOINT exec streamlit run app.py --server.port=${PORT} --server.enableCORS=false --server.enableXsrfProtection=false
+CMD ["./start.sh"]
