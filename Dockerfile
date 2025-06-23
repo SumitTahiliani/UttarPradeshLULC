@@ -19,4 +19,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE $PORT
 
-CMD ["sh", "-c", "streamlit run app.py --server.port=$PORT --server.enableCORS=false]
+CMD streamlit run app.py --server.port=$PORT --server.enableCORS=false --server.enableXsrfProtection=false
