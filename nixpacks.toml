@@ -1,2 +1,2 @@
 [phases.setup]
-aptPkgs= ["...", "libexpat1" , "gdal-bin", "gcc", "libspatialindex"]
+aptPkgs= ["...", "libexpat1" , "gdal-bin", "gcc"]
