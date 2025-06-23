@@ -460,7 +460,6 @@ DW_CLASSES = {
     0: 'Water', 1: 'Trees', 2: 'Grass', 3: 'Flooded Vegetation', 4: 'Crops',
     5: 'Shrub & Scrub', 6: 'Built-up', 7: 'Bare Ground', 8: 'Snow & Ice'
 }
-RASTER_FOLDER = "dw_up_rasters"
 VIS_CLASS_IDS = list(range(9))
 VIS_PALETTE = [
     '#419bdf', '#397d49', '#88b053', '#7a87c6', '#e49635',
