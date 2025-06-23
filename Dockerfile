@@ -17,6 +17,6 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE $PORT
+EXPOSE 8000
 
-CMD streamlit run app.py --server.port=$PORT --server.enableCORS=false --server.enableXsrfProtection=false
+ENTRYPOINT exec streamlit run app.py --server.port=${PORT} --server.enableCORS=false --server.enableXsrfProtection=false
