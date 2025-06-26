@@ -29,7 +29,7 @@ def get_raster_path(year):
     filename = f"dw_up_{year}.tif"
     download_url = base_url + filename
 
-    cache_dir = os.path.join(tempfile.gettempdir(), "dw_up_cache")
+    cache_dir = os.path.join(os.getcwd(), "huggingface_rasters")
     os.makedirs(cache_dir, exist_ok=True)
     local_path = os.path.join(cache_dir, filename)
 
