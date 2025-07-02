@@ -12,13 +12,26 @@ import pandas as pd
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from shapely.geometry import box, mapping
 import leafmap.foliumap as leafmap
+import io
 import tempfile
 import json
 from utils import buffer_bbox
 from skimage.transform import resize
-import urllib.request
 
 RASTER_FOLDER = "/home/azureuser/app/raster_data"
+
+# === Constants ===
+DW_CLASSES = {
+    0: 'Water', 1: 'Trees', 2: 'Grass', 3: 'Flooded Vegetation', 4: 'Crops',
+    5: 'Shrub & Scrub', 6: 'Built-up', 7: 'Bare Ground', 8: 'Snow & Ice'
+}
+VIS_CLASS_IDS = list(range(9))
+VIS_PALETTE = [
+    '#419bdf', '#397d49', '#88b053', '#7a87c6', '#e49635',
+    '#dfc35a', '#c4281b', '#a59b8f', '#b39fe1'
+]
+cmap = ListedColormap(VIS_PALETTE)
+
 
 # === Utility ===
 def get_raster_path(year):
@@ -46,19 +59,6 @@ def downsample_and_mask(src, geojson_geom, scale_factor=0.2):
             anti_aliasing=False
         ).astype(np.uint8)
     return data
-
-
-# === Constants ===
-DW_CLASSES = {
-    0: 'Water', 1: 'Trees', 2: 'Grass', 3: 'Flooded Vegetation', 4: 'Crops',
-    5: 'Shrub & Scrub', 6: 'Built-up', 7: 'Bare Ground', 8: 'Snow & Ice'
-}
-VIS_CLASS_IDS = list(range(9))
-VIS_PALETTE = [
-    '#419bdf', '#397d49', '#88b053', '#7a87c6', '#e49635',
-    '#dfc35a', '#c4281b', '#a59b8f', '#b39fe1'
-]
-cmap = ListedColormap(VIS_PALETTE)
 
 # === Caching ===
 @st.cache_data
@@ -119,7 +119,15 @@ def plot_land_cover_trends(df):
     col1, col2, col3 = st.columns([1, 6, 1])
     with col2:
         st.pyplot(fig)
-
+        buf = io.BytesIO()
+        fig.savefig(buf, format="png", bbox_inches='tight')
+        buf.seek(0)
+        st.download_button(
+        label="📥 Download Trend Plot as PNG",
+        data=buf,
+        file_name="land_cover_trends.png",
+        mime="image/png"
+        )
 def visualize_multiple_years(images_by_year):
     years = sorted(images_by_year)
     fig, axs = plt.subplots(2, 5, figsize=(20, 8))
@@ -139,6 +147,15 @@ def visualize_multiple_years(images_by_year):
     col1, col2, col3 = st.columns([1, 6, 1])
     with col2:
         st.pyplot(fig)
+        buf = io.BytesIO()
+        fig.savefig(buf, format="png", bbox_inches='tight')
+        buf.seek(0)
+    st.download_button(
+            label="📥 Download Yearly Maps as PNG",
+            data=buf,
+            file_name="land_cover_maps.png",
+            mime="image/png"
+        )
 
 def show_overlay_on_map(image_array, bbox):
     minx, miny, maxx, maxy = bbox
@@ -206,6 +223,15 @@ def display_change_detection(bbox):
         ax1.set_title("Changed Pixels", fontsize=14)
         ax1.axis('off')
         st.pyplot(fig1)
+        buf1 = io.BytesIO()
+        fig1.savefig(buf1, format="png", bbox_inches='tight')
+        buf1.seek(0)
+        st.download_button(
+            label="📥 Download Changed Pixels Map",
+            data=buf1,
+            file_name="changed_pixels.png",
+            mime="image/png"
+        )
 
     with plot_col2:
         fig2, ax2 = plt.subplots(figsize=(3, 3))
@@ -213,6 +239,15 @@ def display_change_detection(bbox):
         ax2.set_title(f"{from_class} → {to_class}", fontsize=14)
         ax2.axis('off')
         st.pyplot(fig2)
+        buf2 = io.BytesIO()
+        fig2.savefig(buf2, format="png", bbox_inches='tight')
+        buf2.seek(0)
+        st.download_button(
+            label=f"📥 Download {from_class}→{to_class} Change Map",
+            data=buf2,
+            file_name=f"{from_class.lower().replace(' ', '_')}_to_{to_class.lower().replace(' ', '_')}.png",
+            mime="image/png"
+        )
 
 # === Streamlit App ===
 st.title("Land Cover Analysis (Uttar Pradesh, Dynamic World)")
