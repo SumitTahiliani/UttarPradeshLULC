@@ -16,7 +16,7 @@ def get_raster_path(state_code: str, year: int) -> Optional[str]:
     """Download and cache raster for a given state and year from HuggingFace, return local path."""
     folder = f"dw_{state_code}_rasters"
     filename = f"dw_{state_code}_{year}.tif"
-    base_url = f"https://huggingface.co/datasets/sumittahiliani/UttarPradeshYearlyDynamicWorld/resolve/main/{folder}/"
+    base_url = f"https://huggingface.co/datasets/sumittahiliani/IndiaYearlyDynamicWorld/resolve/main/{folder}/"
     download_url = base_url + filename
     cache_dir = os.path.join(os.getcwd(), folder)
     os.makedirs(cache_dir, exist_ok=True)
