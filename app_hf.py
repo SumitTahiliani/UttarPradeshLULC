@@ -1,11 +1,11 @@
 """
-Streamlit UI for LULC project (multi-state, local rasters).
+Streamlit UI for LULC project (multi-state, HuggingFace rasters).
 Handles user interaction and high-level orchestration only.
 """
 
 import streamlit as st
 from utils import buffer_bbox, detect_state_from_bbox
-from raster_utils import get_raster_path, downsample_and_mask
+from hf_raster_utils import get_raster_path, downsample_and_mask
 from analysis import analyze_aoi, get_array, display_change_detection
 from plotting import plot_land_cover_trends, visualize_multiple_years, show_overlay_on_map
 from geocoding import search_location
@@ -22,7 +22,7 @@ DW_CLASSES = {
 
 st.set_page_config(layout="wide")
 
-st.title("Land Cover Analysis (India, Dynamic World)")
+st.title("Land Cover Analysis (India, Dynamic World, HuggingFace)")
 
 # New Analysis button
 if "selected_bbox" in st.session_state:

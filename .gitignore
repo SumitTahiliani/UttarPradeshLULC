@@ -1,7 +1,73 @@
+# Raster files
 *.tif
-*.zip
+*.tiff
+*.img
+*.hdr
+*.bil
+*.bsq
+*.dat
+*.asc
+*.grd
+*.nc
+*.hdf
+*.h5
+*.hdf5
+
+# Raster folders
+dw_up_rasters/
+dw_wb_rasters/
+dw_mh_rasters/
+dw_uk_rasters/
 temp_rasters/
+rasters/
+data/rasters/
+data/*_rasters/
+
+# Archive files
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Python
 __pycache__/
 *.pyc
-.DS_Store
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment files
 .env
+.env.local
+.env.*.local
+venv/
+env/
+ENV/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+.atom/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
